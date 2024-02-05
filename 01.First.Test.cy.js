@@ -1,44 +1,34 @@
 /// <reference types="Cypress" />
 
-describe("visiting google", () => {
+describe("Visiting Google", () => {
+    // Using `beforeEach` to navigate to Google before each test ensures we're always starting from the same state.
     beforeEach(() => {
         cy.visit("https://google.com");
     });
+
     it("shows 'Google' as the page title", () => {
-        // I'm simplifying here, since the chained assertion is easiest
-        // for most situations.
+        // Direct assertion on the page title to verify it matches "Google"
         cy.title().should("equal", "Google");
     });
+
     it("has a valid UI", () => {
-        cy.visit("https://google.com");
+        // Verify the search input is visible, has a 'title' attribute of "Search", and is empty.
         cy.get("input[name=q]")
             .should("be.visible")
-            // should assertions yield the subject of their assertion
-            // to the next method, so we can keep chaining.
-            .should("have.attr", "title", "Search")
-            .should("have.value", "");
-        // There are TWO input buttons with the name "btnK"
-        // cy.get("[name=btnK]") will yield both
-        // the `.eq(0)` method picks the first from the results
-        // just like in jQuery.
-        // The first is hidden on the autocomplete popup, but
-        // the second, at index 1, is visible right away.
+            .and("have.attr", "title", "Search")
+            .and("have.value", "");
+
+        // Check visibility of the second 'Google Search' button which is typically visible to the user.
         cy.get("[name=btnK]").eq(1).should("be.visible");
-        // We could also chain a .find() off of a .get() to sort of
-        // "search within" a previous element or elements. Here I
-        // will get the autocomplete popout, and find the Google Search
-        // button within it.
-        cy.get("[jsaction*=mouseout]")
-            .find("[name=btnK]")
+
+        // Using `find` to locate the 'Google Search' button within the autocomplete popup to verify it is not visible,
+        // has a value of "Google Search", and its type is "submit".
+        cy.get("[jsaction*=mouseout]").find("[name=btnK]")
             .should("not.be.visible")
-            .should("have.value", "Google Search")
-            .should("have.attr", "type", "submit");
-        // cy.contains(someText) will search the whole page, or chain
-        // off of a previous .get() or .find()
-        cy.contains("I'm Feeling Lucky").should(
-            "have.attr",
-            "aria-label",
-            "I'm Feeling Lucky"
-        );
+            .and("have.value", "Google Search")
+            .and("have.attr", "type", "submit");
+
+        // Assert that the "I'm Feeling Lucky" button has the correct 'aria-label' attribute.
+        cy.contains("I'm Feeling Lucky").should("have.attr", "aria-label", "I'm Feeling Lucky");
     });
 });
