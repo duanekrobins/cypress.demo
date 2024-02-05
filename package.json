@@ -18,6 +18,9 @@
     "docker-tail": "docker compose -f src/main/docker/app.yml logs -f"
   },
   "devDependencies": {
-    "cypress": "^12.3.0"
+    "cypress": "^12.17.4"
+  },
+  "dependencies": {
+    "save-dev": "^0.0.1-security"
   }
 }
