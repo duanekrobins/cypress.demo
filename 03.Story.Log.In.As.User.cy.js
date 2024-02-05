@@ -43,4 +43,3 @@ describe("Visiting app home page on localhost 8080", () => {
         cy.get('h4').should('contain.text', 'Logged out successfully!');
     });
 });
-
